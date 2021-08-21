@@ -10,7 +10,7 @@ public class CAOService
 
     public static final String BREAKING_CHARACTER = "%%";
 
-    //Command strings
+    //Command stringss
     public static final String QUIT_MENU = "QUIT";
     public static final String REGISTER_COMMAND = "REGISTER";
     public static final String SUCCESSFUL_REGISTER = "REGISTERED";
