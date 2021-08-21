@@ -1,4 +1,4 @@
-package com.dkit.oopca5.server;
+package com.dkit.oopca5.server.test;
 
 /* The server package should contain all code to run the server. The server uses TCP sockets and thread per client.
  The server should connect to a MySql database to register clients, allow them to login and choose courses

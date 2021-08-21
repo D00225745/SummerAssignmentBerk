@@ -1,4 +1,4 @@
-package com.dkit.oopca5.client;
+package com.dkit.oopca5.client.test;
 
 /* The client package should contain all code and classes needed to run the Client
  */
