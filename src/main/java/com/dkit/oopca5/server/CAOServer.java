@@ -5,12 +5,11 @@ package com.dkit.oopca5.server;
  The server should listen for connections and once a connection is accepted it should spawn a new CAOClientHandler thread to deal with that connection. The server then returns to listening
  */
 
-import com.dkit.oopca5.core.CAOService;
+import com.dkit.oopca5.core.test.CAOService;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

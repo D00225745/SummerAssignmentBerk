@@ -8,8 +8,8 @@ package com.dkit.oopca5.client;
 
 //This is the dto
 
-import com.dkit.oopca5.core.CAOService;
-import com.dkit.oopca5.core.Colours;
+import com.dkit.oopca5.core.test.CAOService;
+import com.dkit.oopca5.core.test.Colours;
 import com.dkit.oopca5.server.MySqlStudentDAO;
 
 import java.io.*;

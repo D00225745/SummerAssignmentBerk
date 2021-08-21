@@ -4,8 +4,8 @@ package com.dkit.oopca5.server;
 The CAOClientHandler will run as a thread. It should listen for messages from the Client and respond to them.There should be one CAOClientHandler per Client.
  */
 
-import com.dkit.oopca5.core.CAOService;
-import com.dkit.oopca5.core.Colours;
+import com.dkit.oopca5.core.test.CAOService;
+import com.dkit.oopca5.core.test.Colours;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

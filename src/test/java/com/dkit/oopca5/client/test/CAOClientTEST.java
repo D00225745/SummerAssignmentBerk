@@ -1,4 +1,4 @@
-package com.dkit.oopca5.core.johnloane;
+package com.dkit.oopca5.client.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
+public class CAOClientTEST
 {
     /**
      * Rigorous Test :-)

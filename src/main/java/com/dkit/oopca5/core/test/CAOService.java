@@ -1,4 +1,4 @@
-package com.dkit.oopca5.core;
+package com.dkit.oopca5.core.test;
 
 /* The CAOService class has constants to define all of the messages that are sent between the Client and Server
  */
