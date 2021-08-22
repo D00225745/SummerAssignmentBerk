@@ -101,10 +101,10 @@ public class CAOClientHandler extends Thread
                 {
                     String vaccineCentreId = components[1];
 
-                    boolean vaccineCentreExists = vaccineCentreDatabase.doesVaccineCentreExist(vaccineCentreId);
+                    boolean vaccineCentreExists = vaccineCentreDatabase.doesCentreExist(vaccineCentreId);
                     if (vaccineCentreExists)
                     {
-                        response = vaccineCentreDatabase.displayVaccineCentreExist(vaccineCentreId);
+                        response = vaccineCentreDatabase.displayCentre(vaccineCentreId);
                     }
                     else
                     {
@@ -113,10 +113,10 @@ public class CAOClientHandler extends Thread
                 }
                 else if(components[0].equals(CAOService.DISPLAY_ALL_VACCENTRE))
                 {
-                    response = vaccineCentreDatabase.displayAllVaccineCentres();
+                    response = vaccineCentreDatabase.displayAllCentres();
                     if (response == CAOService.VACCENTRES_EMPTY)
                     {
-                        response = (Colours.RED + "Couldn't find any courses to display." + Colours.RESET);
+                        response = (Colours.RED + "Couldn't find any vaccine centres to display." + Colours.RESET);
                     }
                 }
                 else if(components[0].equals(CAOService.DISPLAY_CURRENT_APPOINTMENT))
@@ -133,12 +133,12 @@ public class CAOClientHandler extends Thread
                 else if (components[0].equals(CAOService.UPDATE_CURRENT_APPOINTMENT))
                 {
                     String caoNumber = components[1];
-                    String courseId = components[2];
+                    String centreId = components[2];
 
-                    boolean courseExists = vaccineCentreDatabase.doesVaccineCentreExist(courseId);
+                    boolean courseExists = vaccineCentreDatabase.doesCentreExist(centreId);
                     if (courseExists)
                     {
-                        response = vaccineAppointmentDatabase.updateCurrentAppointment(caoNumber, courseId);
+                        response = vaccineAppointmentDatabase.updateCurrentAppointment(caoNumber, centreId);
                     }
                     else
                     {
@@ -151,7 +151,7 @@ public class CAOClientHandler extends Thread
                     response = CAOService.UNRECOGNISED;
                 }
 
-                //SendS back response
+                //Sends back response
                 output.println(response);
                 output.flush();
             }

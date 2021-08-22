@@ -102,12 +102,12 @@ public class CAOClientHandler extends Thread
                 }
                 else if(components[0].equals(CAOService.DISPLAY_VACCENTRE))
                 {
-                    String vaccineCentreId = components[1];
+                    String centreId = components[1];
 
-                    boolean vaccineCentreExists = vaccineCentreDatabase.doesCentreExist(vaccineCentreId);
+                    boolean vaccineCentreExists = vaccineCentreDatabase.doesCentreExist(centreId);
                     if (vaccineCentreExists)
                     {
-                        response = vaccineCentreDatabase.displayCentreExist(vaccineCentreId);
+                        response = vaccineCentreDatabase.displayCentre(centreId);
                     }
                     else
                     {
@@ -159,7 +159,7 @@ public class CAOClientHandler extends Thread
                 output.flush();
             }
         }
-        catch (NoSuchElementException | DAOExceptions | com.dkit.oopca5.server.DAOExceptions e)
+        catch (NoSuchElementException | com.dkit.oopca5.server.DAOExceptions e)
         {
             System.out.println(e.getMessage());
         }
