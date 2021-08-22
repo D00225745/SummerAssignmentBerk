@@ -6,6 +6,9 @@ The CAOClientHandler will run as a thread. It should listen for messages from th
 
 import com.dkit.oopca5.core.CAOService;
 import com.dkit.oopca5.core.Colours;
+import com.dkit.oopca5.server.MySqlUserDAO;
+import com.dkit.oopca5.server.MySqlVaccineAppointmentDAO;
+import com.dkit.oopca5.server.MySqlVaccineCentreDAO;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +23,7 @@ public class CAOClientHandler extends Thread
     private Scanner input;
     private PrintWriter output;
     private int number;
-    private static MySqlUsereDAO userDatabase = new MySqlUserDAO();
+    private static MySqlUserDAO userDatabase = new MySqlUserDAO();
     private static MySqlVaccineCentreDAO vaccineCentreDatabase = new MySqlVaccineCentreDAO();
     private static MySqlVaccineAppointmentDAO vaccineAppointmentDatabase = new MySqlVaccineAppointmentDAO();
 
@@ -73,7 +76,7 @@ public class CAOClientHandler extends Thread
                     String dateOfBirth = components[2];
                     String password = components[3];
 
-                    //User newUser = new Student(caoNumber, dateOfBirth, password);
+                    //User newUser = new User(caoNumber, dateOfBirth, password);
 
                     response = userDatabase.registerUser(caoNumber, dateOfBirth, password);
 
@@ -99,12 +102,12 @@ public class CAOClientHandler extends Thread
                 }
                 else if(components[0].equals(CAOService.DISPLAY_VACCENTRE))
                 {
-                    String vaccineCentreId = components[1];
+                    String centreId = components[1];
 
-                    boolean vaccineCentreExists = vaccineCentreDatabase.doesVaccineCentreExist(vaccineCentreId);
+                    boolean vaccineCentreExists = vaccineCentreDatabase.doesCentreExist(centreId);
                     if (vaccineCentreExists)
                     {
-                        response = vaccineCentreDatabase.displayVaccineCentreExist(vaccineCentreId);
+                        response = vaccineCentreDatabase.displayCentre(centreId);
                     }
                     else
                     {
@@ -113,7 +116,7 @@ public class CAOClientHandler extends Thread
                 }
                 else if(components[0].equals(CAOService.DISPLAY_ALL_VACCENTRE))
                 {
-                    response = vaccineCentreDatabase.displayAllVaccineCentres();
+                    response = vaccineCentreDatabase.displayAllCentres();
                     if (response == CAOService.VACCENTRES_EMPTY)
                     {
                         response = (Colours.RED + "Couldn't find any courses to display." + Colours.RESET);
@@ -133,12 +136,12 @@ public class CAOClientHandler extends Thread
                 else if (components[0].equals(CAOService.UPDATE_CURRENT_APPOINTMENT))
                 {
                     String caoNumber = components[1];
-                    String courseId = components[2];
+                    String centreId = components[2];
 
-                    boolean courseExists = vaccineCentreDatabase.doesVaccineCentreExist(courseId);
-                    if (courseExists)
+                    boolean centreExists = vaccineCentreDatabase.doesCentreExist(centreId);
+                    if (centreExists)
                     {
-                        response = vaccineAppointmentDatabase.updateCurrentAppointment(caoNumber, courseId);
+                        response = vaccineAppointmentDatabase.updateCurrentAppointment(caoNumber, centreId);
                     }
                     else
                     {
@@ -156,7 +159,7 @@ public class CAOClientHandler extends Thread
                 output.flush();
             }
         }
-        catch (NoSuchElementException | DAOExceptions e)
+        catch (NoSuchElementException | com.dkit.oopca5.server.DAOExceptions e)
         {
             System.out.println(e.getMessage());
         }

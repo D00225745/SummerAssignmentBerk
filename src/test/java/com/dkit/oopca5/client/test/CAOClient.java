@@ -222,7 +222,7 @@ public class CAOClient
     {
         System.out.println(Colours.RED + "0) To Quit" + Colours.RESET);
         System.out.println(Colours.BLUE + "1) Logout");
-        System.out.println(Colours.BLUE + "2) Display Course");
+        System.out.println(Colours.BLUE + "2) Display VaccineCentre");
         System.out.println(Colours.BLUE + "3) Display All Courses");
         System.out.println(Colours.BLUE + "4) Display Current Choices");
         System.out.println(Colours.BLUE + "5) Update Current Choices" + Colours.RESET);
