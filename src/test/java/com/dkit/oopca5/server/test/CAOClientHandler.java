@@ -4,8 +4,8 @@ package com.dkit.oopca5.server.test;
 The CAOClientHandler will run as a thread. It should listen for messages from the Client and respond to them.There should be one CAOClientHandler per Client.
  */
 
-import com.dkit.oopca5.core.test.CAOService;
-import com.dkit.oopca5.core.test.Colours;
+import com.dkit.oopca5.core.CAOService;
+import com.dkit.oopca5.core.Colours;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,9 +20,9 @@ public class CAOClientHandler extends Thread
     private Scanner input;
     private PrintWriter output;
     private int number;
-    private static MySqlStudentDAO studentDatabase = new MySqlStudentDAO();
-    private static MySqlCourseDAO courseDatabase = new MySqlCourseDAO();
-    private static MySqlStudentCourseDAO studentCourseDatabase = new MySqlStudentCourseDAO();
+    private static MySqlUsereDAO userDatabase = new MySqlUserDAO();
+    private static MySqlVaccineCentreDAO vaccineCentreDatabase = new MySqlVaccineCentreDAO();
+    private static MySqlVaccineAppointmentDAO vaccineAppointmentDatabase = new MySqlVaccineAppointmentDAO();
 
     public CAOClientHandler(ThreadGroup group, String name, Socket dataSocket, int number)
     {
@@ -73,9 +73,9 @@ public class CAOClientHandler extends Thread
                     String dateOfBirth = components[2];
                     String password = components[3];
 
-                    //Student newStudent = new Student(caoNumber, dateOfBirth, password);
+                    //User newUser = new Student(caoNumber, dateOfBirth, password);
 
-                    response = studentDatabase.registerStudent(caoNumber, dateOfBirth, password);
+                    response = userDatabase.registerUser(caoNumber, dateOfBirth, password);
 
                 }
                 else if(components[0].equals(CAOService.LOGIN_COMMAND))
@@ -83,7 +83,7 @@ public class CAOClientHandler extends Thread
                     int caoNumber = Integer.parseInt(components[1]);
                     String password = components[2];
 
-                    if(studentDatabase.login(caoNumber, password))
+                    if(userDatabase.login(caoNumber, password))
                     {
                         response = CAOService.SUCCESSFUL_LOGIN;
                     }
@@ -97,52 +97,52 @@ public class CAOClientHandler extends Thread
                 {
                     response = CAOService.SESSION_TERMINATED;
                 }
-                else if(components[0].equals(CAOService.DISPLAY_COURSE))
+                else if(components[0].equals(CAOService.DISPLAY_VACCENTRE))
                 {
-                    String courseId = components[1];
+                    String vaccineCentreId = components[1];
 
-                    boolean courseExists = courseDatabase.doesCourseExist(courseId);
-                    if (courseExists)
+                    boolean vaccineCentreExists = vaccineCentreDatabase.doesVaccineCentreExist(vaccineCentreId);
+                    if (vaccineCentreExists)
                     {
-                        response = courseDatabase.displayCourse(courseId);
+                        response = vaccineCentreDatabase.displayVaccineCentreExist(vaccineCentreId);
                     }
                     else
                     {
-                        response = (Colours.RED + "Course does not exist." + Colours.RESET);
+                        response = (Colours.RED + "Vaccine Centre does not exist..." + Colours.RESET);
                     }
                 }
-                else if(components[0].equals(CAOService.DISPLAY_ALL_COURSE))
+                else if(components[0].equals(CAOService.DISPLAY_ALL_VACCENTRE))
                 {
-                    response = courseDatabase.displayAllCourses();
-                    if (response == CAOService.COURSES_EMPTY)
+                    response = vaccineCentreDatabase.displayAllVaccineCentres();
+                    if (response == CAOService.VACCENTRES_EMPTY)
                     {
                         response = (Colours.RED + "Couldn't find any courses to display." + Colours.RESET);
                     }
                 }
-                else if(components[0].equals(CAOService.DISPLAY_CURRENT_CHOICE))
+                else if(components[0].equals(CAOService.DISPLAY_CURRENT_APPOINTMENT))
                 {
                     int caoNumber = Integer.parseInt(components[1]);
-                    response = studentCourseDatabase.displayCurrentChoice(caoNumber);
+                    response = vaccineAppointmentDatabase.displayCurrentAppointment(caoNumber);
 
-                    if(response.equals(CAOService.COURSES_EMPTY))
+                    if(response.equals(CAOService.VACCENTRES_EMPTY))
                     {
-                        response = (Colours.RED + "Couldn't find any courses to display." + Colours.RESET);
+                        response = (Colours.RED + "Couldn't find any Vaccine Centres to display." + Colours.RESET);
                     }
 
                 }
-                else if (components[0].equals(CAOService.UPDATE_CURRENT_CHOICE))
+                else if (components[0].equals(CAOService.UPDATE_CURRENT_APPOINTMENT))
                 {
                     String caoNumber = components[1];
                     String courseId = components[2];
 
-                    boolean courseExists = courseDatabase.doesCourseExist(courseId);
+                    boolean courseExists = vaccineCentreDatabase.doesVaccineCentreExist(courseId);
                     if (courseExists)
                     {
-                        response = studentCourseDatabase.updateCurrentChoice(caoNumber, courseId);
+                        response = vaccineAppointmentDatabase.updateCurrentAppointment(caoNumber, courseId);
                     }
                     else
                     {
-                        response = (Colours.RED + "Course does not exist." + Colours.RESET);
+                        response = (Colours.RED + "Appointment does not exist." + Colours.RESET);
                     }
                 }
 
@@ -151,7 +151,7 @@ public class CAOClientHandler extends Thread
                     response = CAOService.UNRECOGNISED;
                 }
 
-                //Send back response
+                //SendS back response
                 output.println(response);
                 output.flush();
             }
@@ -169,7 +169,7 @@ public class CAOClientHandler extends Thread
             }
             catch (IOException e)
             {
-                System.out.println("Unable to disconnect \n" + e.getMessage());
+                System.out.println("Unable to disconnect... \n" + e.getMessage());
                 System.exit(1);
             }
         }

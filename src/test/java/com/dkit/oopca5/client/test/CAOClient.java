@@ -8,9 +8,9 @@ package com.dkit.oopca5.client.test;
 
 //This is the dto
 
-import com.dkit.oopca5.core.test.CAOService;
-import com.dkit.oopca5.core.test.Colours;
-import com.dkit.oopca5.server.MySqlStudentDAO;
+import com.dkit.oopca5.core.CAOService;
+import com.dkit.oopca5.core.Colours;
+import com.dkit.oopca5.server.MySqlUserDAO;
 
 import java.io.*;
 import java.net.Socket;
@@ -65,7 +65,7 @@ public class CAOClient
                                 break;
 
                             case 1:
-                                message = registerStudent();
+                                message = registerUser();
                                 //message = CAOService.REGISTER_COMMAND;
 
 
@@ -83,7 +83,7 @@ public class CAOClient
                                 break;
 
                             case 2:
-                                message = studentLogin();
+                                message = userLogin();
 
                                 serverOut.println(message);
 
@@ -136,21 +136,21 @@ public class CAOClient
                                 break;
 
                             case 2:
-                                message = inputCourseId();
+                                message = inputVaccineCentreId();
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
                                 System.out.println(response);
                                 break;
 
                             case 3:
-                                message = CAOService.DISPLAY_ALL_COURSE;
+                                message = CAOService.DISPLAY_ALL_VACCENTRE;
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
                                 System.out.println(response);
                                 break;
 
                             case 4:
-                                String toSend = CAOService.DISPLAY_CURRENT_CHOICE+CAOService.BREAKING_CHARACTER+loggedInUser;
+                                String toSend = CAOService.DISPLAY_CURRENT_APPOINTMENT+CAOService.BREAKING_CHARACTER+loggedInUser;
                                 message = toSend;
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
@@ -189,7 +189,7 @@ public class CAOClient
         int counter = 1;
         boolean loop = true;
         String courseId = "";
-        StringBuffer message = new StringBuffer(CAOService.UPDATE_CURRENT_CHOICE);
+        StringBuffer message = new StringBuffer(CAOService.UPDATE_CURRENT_APPOINTMENT);
         message.append(CAOService.BREAKING_CHARACTER);
 
         message.append(loggedInUser);
@@ -204,18 +204,18 @@ public class CAOClient
 
     }
 
-    private static String inputCourseId()
+    private static String inputVaccineCentreId()
     {
         keyboard.nextLine();
-        StringBuffer courseId = new StringBuffer(CAOService.DISPLAY_COURSE);
-        courseId.append(CAOService.BREAKING_CHARACTER);
+        StringBuffer vaccineCentreId = new StringBuffer(CAOService.DISPLAY_VACCENTRE);
+        vaccineCentreId.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("Please enter course id for course you want to display:");
-        String course = keyboard.nextLine();
+        String vaccineCentre = keyboard.nextLine();
 
-        courseId.append(course);
+        vaccineCentreId.append(vaccineCentre);
 
-        return courseId.toString();
+        return vaccineCentreId.toString();
     }
 
     private static void displayLoggedInMenu()
@@ -269,10 +269,10 @@ public class CAOClient
         return number;
     }
 
-    private static String registerStudent()
+    private static String registerUser()
     {
-        StringBuffer registeredStudent = new StringBuffer(CAOService.REGISTER_COMMAND);
-        registeredStudent.append(CAOService.BREAKING_CHARACTER);
+        StringBuffer registeredUser = new StringBuffer(CAOService.REGISTER_COMMAND);
+        registeredUser.append(CAOService.BREAKING_CHARACTER);
         int caoNumber = 1;
         String dateOfBirth = "a";
         String password = "a";
@@ -297,8 +297,8 @@ public class CAOClient
         }
 
         keyboard.nextLine();
-        registeredStudent.append(caoNumber);
-        registeredStudent.append(CAOService.BREAKING_CHARACTER);
+        registeredUser.append(caoNumber);
+        registeredUser.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("\nPlease enter your date of birth (YYYY-MM-DD): ");
         while (!regexChecker.testDateOfBirth(dateOfBirth))
@@ -311,8 +311,8 @@ public class CAOClient
             }
         }
 
-        registeredStudent.append(dateOfBirth);
-        registeredStudent.append(CAOService.BREAKING_CHARACTER);
+        registeredUser.append(dateOfBirth);
+        registeredUser.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("\nPlease enter your password (minimum of 8 characters, maximum of 30 characters)");
         while (!regexChecker.testPassword(password))
@@ -326,13 +326,13 @@ public class CAOClient
             }
         }
 
-        registeredStudent.append(password);
-        registeredStudent.append(CAOService.BREAKING_CHARACTER);
+        registeredUser.append(password);
+        registeredUser.append(CAOService.BREAKING_CHARACTER);
 
-        return registeredStudent.toString();
+        return registeredUser.toString();
     }
 
-    private static String studentLogin()
+    private static String userLogin()
     {
         StringBuffer loginDetails = new StringBuffer(CAOService.LOGIN_COMMAND);
         loginDetails.append(CAOService.BREAKING_CHARACTER);
