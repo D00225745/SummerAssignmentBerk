@@ -1,12 +1,12 @@
 package com.dkit.oopca5.core;
 
-public class Student
+public class User
 {
     private int caoNumber;
     private String dateOfBirth;
     private String password;
 
-    public Student(int caoNumber, String dateOfBirth, String password) {
+    public User(int caoNumber, String dateOfBirth, String password) {
         this.caoNumber = caoNumber;
         this.dateOfBirth = dateOfBirth;
         this.password = password;
@@ -26,7 +26,7 @@ public class Student
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "User{" +
                 "caoNumber=" + caoNumber +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", password='" + password + '\'' +

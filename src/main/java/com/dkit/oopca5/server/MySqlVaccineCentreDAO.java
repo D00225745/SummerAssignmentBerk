@@ -2,7 +2,7 @@ package com.dkit.oopca5.server;
 
 import com.dkit.oopca5.core.CAOService;
 import com.dkit.oopca5.core.Colours;
-import com.dkit.oopca5.core.ICourseDAO;
+import com.dkit.oopca5.core.IVaccineCentreDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,20 +10,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
-public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
+public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO {
 
     @Override
-    public String displayCourse(String courseId) throws DAOExceptions {
+    public String displayCentre(String centreId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String courseDetails = "none";
+        String centreDetails = "none";
 
         try {
             con = this.getConnection();
-            String query = "select * from course where course_id = ?";
+            String query = "select * from centre where course_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, courseId);
+            ps.setString(1, centreId);
 
             ps.executeQuery();
 
@@ -32,7 +32,7 @@ public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
                 String title = rs.getString("title");
                 String institution = rs.getString("institution");
 
-                courseDetails = ("Course Id: " + courseId + "\nLevel: " + level + "\nTitle: " + title + "\nInstitution" + institution);
+                centreDetails = ("VaccineCentre Id: " + centreId + "\nLevel: " + level + "\nTitle: " + title + "\nInstitution" + institution);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -52,31 +52,31 @@ public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
             }
         }
 
-        return courseDetails;
+        return centreDetails;
     }
 
     @Override
-    public String displayAllCourses() throws DAOExceptions {
+    public String displayAllCentres() throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        StringBuffer courses = new StringBuffer();
-        String courseDetails = "0";
+        StringBuffer centres = new StringBuffer();
+        String centreDetails = "0";
 
         try {
             con = this.getConnection();
-            String query = "select * from course";
+            String query = "select * from centre";
             ps = con.prepareStatement(query);
 
             ps.executeQuery();
 
             while (rs.next() && rs != null) {
-                String courseId = rs.getString("course_id");
+                String centreId = rs.getString("centre_id");
                 int level = rs.getInt("level");
                 String title = rs.getString("title");
                 String institution = rs.getString("institution");
 
-                courses.append("\nCourse Id: " + courseId + "\tLevel: " + level + "\tTitle: " + title + "\tInstitution: " + institution);
+                centres.append("\nVaccineCentre Id: " + centreId + "\tLevel: " + level + "\tTitle: " + title + "\tInstitution: " + institution);
             }
         }
         catch (SQLException e)
@@ -85,12 +85,12 @@ public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
         }
         catch (NoSuchElementException e)
         {
-            System.out.println(Colours.RED + "Couldn't find any courses to display." + Colours.RESET);
+            System.out.println(Colours.RED + "Could not find any vaccine centres to display." + Colours.RESET);
         }
         catch (NullPointerException e)
         {
             e.getMessage();
-            return CAOService.COURSES_EMPTY;
+            return CAOService.VACCENTRES_EMPTY;
         }
         finally {
             try {
@@ -108,12 +108,12 @@ public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
             }
         }
 
-        courseDetails = courses.toString();
-        return courseDetails;
+        centreDetails = centres.toString();
+        return centreDetails;
     }
 
     @Override
-    public boolean doesCourseExist(String courseId) throws DAOExceptions {
+    public boolean doesCentreExist(String centreId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -121,9 +121,9 @@ public class MySqlCourseDAO extends MySqlDAO implements ICourseDAO {
 
         try {
             con = this.getConnection();
-            String query = "select * from course where course_id = ?";
+            String query = "select * from vaccine centre where centre_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, courseId);
+            ps.setString(1, centreId);
 
             ps.executeQuery();
 

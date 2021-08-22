@@ -20,7 +20,7 @@ public class CAOClientHandler extends Thread
     private Scanner input;
     private PrintWriter output;
     private int number;
-    private static MySqlUsereDAO userDatabase = new MySqlUserDAO();
+    private static MySqlUserDAO userDatabase = new MySqlUserDAO();
     private static MySqlVaccineCentreDAO vaccineCentreDatabase = new MySqlVaccineCentreDAO();
     private static MySqlVaccineAppointmentDAO vaccineAppointmentDatabase = new MySqlVaccineAppointmentDAO();
 
@@ -73,7 +73,7 @@ public class CAOClientHandler extends Thread
                     String dateOfBirth = components[2];
                     String password = components[3];
 
-                    //User newUser = new Student(caoNumber, dateOfBirth, password);
+                    //User newUser = new User(caoNumber, dateOfBirth, password);
 
                     response = userDatabase.registerUser(caoNumber, dateOfBirth, password);
 

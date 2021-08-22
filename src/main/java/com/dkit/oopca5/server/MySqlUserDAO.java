@@ -3,17 +3,17 @@ package com.dkit.oopca5.server;
 //mysql -uroot -p
 
 import com.dkit.oopca5.core.CAOService;
-import com.dkit.oopca5.core.IStudentDAO;
+import com.dkit.oopca5.core.IUserDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
+public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
 
     @Override
-    public String registerStudent(int caoNumber, String dateOfBirth, String password) throws DAOExceptions
+    public String registerUser(int caoNumber, String dateOfBirth, String password) throws DAOExceptions
     {
         Connection con = null;
         PreparedStatement ps = null;
@@ -22,7 +22,7 @@ public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
 
         try {
             con = this.getConnection();
-            String query = "insert into student values(?, ?, ?)";
+            String query = "insert into user values(?, ?, ?)";
             ps = con.prepareStatement(query);
 
 
@@ -66,7 +66,7 @@ public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
 
     @Override
     public boolean checkIfCAONumberTaken(int caoNumber) {
-        boolean studentExists = false;
+        boolean userExists = false;
 
         Connection con = null;
         PreparedStatement ps = null;
@@ -75,14 +75,14 @@ public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
         try {
             con = this.getConnection();
 
-            String query = "select * from student where cao_number = ?";
+            String query = "select * from user where cao_number = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, Integer.toString(caoNumber));
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                studentExists = true;
+                userExists = true;
             }
         }
         catch (DAOExceptions e)
@@ -113,7 +113,7 @@ public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
 
         }
 
-        return studentExists;
+        return userExists;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MySqlStudentDAO extends MySqlDAO implements IStudentDAO {
         try {
             con = this.getConnection();
 
-            String query = "select * from student where cao_number = ? and password = ?";
+            String query = "select * from user where cao_number = ? and password = ?";
 
             ps = con.prepareStatement(query);
             ps.setString(1, Integer.toString(caoNumber));

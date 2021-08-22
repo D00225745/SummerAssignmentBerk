@@ -1,18 +1,16 @@
 package com.dkit.oopca5.server;
 
 import com.dkit.oopca5.core.CAOService;
-import com.dkit.oopca5.core.Colours;
-import com.dkit.oopca5.core.IStudentCourseDAO;
+import com.dkit.oopca5.core.IVaccineAppointmentDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.NoSuchElementException;
 
-public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
+public class MySqlVaccineAppointmentDAO extends MySqlDAO implements IVaccineAppointmentDAO
 {
-    private static MySqlCourseDAO courseDAO = new MySqlCourseDAO();
+    private static MySqlVaccineCentreDAO centreDAO = new MySqlVaccineCentreDAO();
 
     @Override
     public String displayCurrentChoice(int caoNumber) throws DAOExceptions
@@ -26,7 +24,7 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
         try
         {
             con = this.getConnection();
-            String query = "select * from student_course where cao_number = ?";
+            String query = "select * from Vaccine appointment where cao_number = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, Integer.toString(caoNumber));
 
@@ -34,9 +32,9 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
 
             while(rs.next())
             {
-                String courseId = rs.getString("courseId");
+                String centreId = rs.getString("centreId");
 
-                currentChoices.append(courseDAO.displayCourse(courseId));
+                currentChoices.append(centreDAO.displayCentre(centreId));
                 currentChoices.append("\n\n");
             }
         }
@@ -47,12 +45,12 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
         catch (NullPointerException e)
         {
             e.getMessage();
-            return CAOService.COURSES_EMPTY;
+            return CAOService.VACCENTRES_EMPTY;
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
             e.getMessage();
-            return CAOService.COURSES_EMPTY;
+            return CAOService.VACCENTRES_EMPTY;
         }
         finally {
             try {
@@ -75,7 +73,7 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
 
     //Didn't know how to make multiple choices...
     @Override
-    public String updateCurrentChoice(String caoNumber, String choice) throws DAOExceptions
+    public String updateCurrentAppointment(String caoNumber, String choice) throws DAOExceptions
     {
         Connection con = null;
         PreparedStatement ps = null;
@@ -85,7 +83,7 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
         try
         {
             con = this.getConnection();
-            String query = "delete * from student_choices where cao_number = ?; insert into student_course values(?, ?)";
+            String query = "delete * from vaccine_appointment where cao_number = ?; insert into vaccine_appointment values(?, ?)";
 
             int caoNum = Integer.parseInt(caoNumber);
 
@@ -95,13 +93,13 @@ public class MySqlStudentCourseDAO extends MySqlDAO implements IStudentCourseDAO
 
             ps.executeUpdate();
 
-            if(!displayCurrentChoice(caoNum).equals(CAOService.COURSES_EMPTY))
+            if(!displayCurrentChoice(caoNum).equals(CAOService.VACCENTRES_EMPTY))
             {
-                result = CAOService.UPDATE_CURRENT_CHOICE_SUCCESS;
+                result = CAOService.UPDATE_CURRENT_APPOINTMENT_SUCCESS;
             }
             else
             {
-                result = CAOService.UPDATE_CURRENT_CHOICE_FAILED;
+                result = CAOService.UPDATE_CURRENT_APPOINTMENT_FAILED;
             }
         }
         catch (SQLException e)
