@@ -1,4 +1,4 @@
-package com.dkit.oopca5.core.test;
+package com.dkit.oopca5.core;
 
 /* The CAOService class has constants to define all of the messages that are sent between the Client and Server
  */
@@ -19,14 +19,14 @@ public class CAOService
     public static final String SUCCESSFUL_LOGIN = "LOGGED IN";
     public static final String FAILED_LOGIN = "LOGIN FAILED";
     public static final String LOGOUT = "LOGOUT";
-    public static final String DISPLAY_COURSE = "DISPLAY COURSE";
-    public static final String DISPLAY_ALL_COURSE = "DISPLAY ALL COURSES";
-    public static final String COURSES_EMPTY = "COURSE TABLE EMPTY";
-    public static final String DISPLAY_CURRENT_CHOICE = "DISPLAY CURRENT CHOICE";
-    public static final String UPDATE_CURRENT_CHOICE = "UPDATE CURRENT CHOICE";
-    public static final String UPDATE_CURRENT_CHOICE_SUCCESS = "UPDATE CURRENT CHOICE SUCCESS";
-    public static final String UPDATE_CURRENT_CHOICE_FAILED = "UPDATE CURRENT CHOICE FAILED";
-    public static final String COURSE_NOT_FOUND = "COURSE NOT FOUND";
+    public static final String DISPLAY_VACCENTRE = "DISPLAY VACCINE CENTRE";
+    public static final String DISPLAY_ALL_VACCENTRE = "DISPLAY ALL VACCINE CENTRES";
+    public static final String VACCENTRES_EMPTY = "VACCINE CENTRE TABLE EMPTY";
+    public static final String DISPLAY_CURRENT_APPOINTMENT = "DISPLAY CURRENT APPOINTMENT";
+    public static final String UPDATE_CURRENT_APPOINTMENT = "UPDATE CURRENT APPOINTMENT";
+    public static final String UPDATE_CURRENT_APPOINTMENT_SUCCESS = "UPDATE CURRENT APPOINTMENT SUCCESS";
+    public static final String UPDATE_CURRENT_APPOINTMENT_FAILED = "UPDATE CURRENT APPOINTMENT FAILED";
+    public static final String VACCENTRE_NOT_FOUND = "COURSE NOT FOUND";
 
 
 
