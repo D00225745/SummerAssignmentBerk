@@ -111,7 +111,7 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
     }
 
     @Override
-    public boolean doesVaccineCenterExist(int centerId) throws DAOExceptions {
+    public boolean doesVaccineCentreExist(int centerId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
