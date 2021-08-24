@@ -2,22 +2,22 @@ package com.dkit.oopca5.core;
 
 public class User
 {
-    private int caoNumber;
-    private String dateOfBirth;
+    private int userId;
+    private String email;
     private String password;
 
-    public User(int caoNumber, String dateOfBirth, String password) {
-        this.caoNumber = caoNumber;
-        this.dateOfBirth = dateOfBirth;
+    public User(int userId, String email, String password) {
+        this.userId = userId;
+        this.email = email;
         this.password = password;
     }
 
-    public int getCaoNumber() {
-        return caoNumber;
+    public int getUserId() {
+        return userId;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -27,8 +27,8 @@ public class User
     @Override
     public String toString() {
         return "User{" +
-                "caoNumber=" + caoNumber +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
+                "User ID=" + userId+
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

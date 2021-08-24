@@ -1,5 +1,8 @@
 package com.dkit.oopca5.client;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /* This class should contain static methods to verify input in the application
  */
 //https://www.javacodeexamples.com/java-regular-expression-validate-date-example-regex/1504
@@ -8,17 +11,14 @@ public class RegexChecker
     public static final String caoNumberRegex = "[\\d]{8}";
     public static final String dobRegex = "\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|[3][01])";
     public static final String passwordRegex = "[\\S]{8,30}";
+    public static final String emailregex = "^[A-Za-z0-9+_.-]+@(.+)$";
 
-
-    public static boolean testCaoNumber(int caoNumber)
+    public static boolean testEmail(String email)
     {
-        boolean result = false;
-        if (Integer.toString(caoNumber).matches(caoNumberRegex))
-        {
-            result = true;
-        }
+        Pattern pattern = Pattern.compile(emailregex);
 
-        return result;
+        Matcher matcher = pattern.matcher(email);
+        return  matcher.matches();
     }
 
     public static boolean testDateOfBirth(String dateOfBirth)
@@ -43,11 +43,11 @@ public class RegexChecker
         return result;
     }
 
-    public static boolean testUserDetails(int caoNumber, String dateOfBirth, String password)
+    public static boolean testUserDetails(String email, String dateOfBirth, String password)
     {
         boolean result = false;
 
-        if(testCaoNumber(caoNumber) && testDateOfBirth(dateOfBirth) && testPassword(password))
+        if(testEmail(email) && testDateOfBirth(dateOfBirth) && testPassword(password))
         {
             result = true;
         }
@@ -56,4 +56,3 @@ public class RegexChecker
     }
 
 }
-
