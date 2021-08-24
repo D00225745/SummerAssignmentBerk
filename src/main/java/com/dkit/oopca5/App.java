@@ -17,10 +17,10 @@ public class App
 
     private static void testRegex()
     {
-        User userOne = new User(12345678, "2000-12-11", "123456789");
-        User userTwo = new User(123456789, "2000-12-11", "123456789");
-        User userThree = new User(12345678, "2000-13-11", "123456789");
-        User userFour = new User(12345678, "2000-13-11", "1234567");
+        User userOne = new User(12345678, "useremail@gmail.com", "123456789");
+        User userTwo = new User(123456789, "useremail@gmail.com", "123456789");
+        User userThree = new User(12345678, "useremail@hotmail.com", "123456789");
+        User userFour = new User(12345678, "useremail@hotmail.com", "1234567");
 
         ArrayList<User> users = new ArrayList();
 
