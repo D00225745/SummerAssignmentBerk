@@ -8,10 +8,24 @@ import java.util.regex.Pattern;
 //https://www.javacodeexamples.com/java-regular-expression-validate-date-example-regex/1504
 public class RegexChecker
 {
-    public static final String caoNumberRegex = "[\\d]{8}";
+    public static final String userIdRegex = "[\\d]{8}";
     public static final String dobRegex = "\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|[3][01])";
     public static final String passwordRegex = "[\\S]{8,30}";
     public static final String emailregex = "^[A-Za-z0-9+_.-]+@(.+)$";
+
+
+
+
+    public static boolean testUserId(int userId)
+    {
+        boolean result = false;
+        if (Integer.toString(userId).matches(userIdRegex))
+        {
+            result = true;
+        }
+
+        return result;
+    }
 
     public static boolean testEmail(String email)
     {
@@ -43,11 +57,11 @@ public class RegexChecker
         return result;
     }
 
-    public static boolean testUserDetails(String email, String dateOfBirth, String password)
+    public static boolean testUserDetails(int userId, String email, String password)
     {
         boolean result = false;
 
-        if(testEmail(email) && testDateOfBirth(dateOfBirth) && testPassword(password))
+        if(testUserId(userId) && testEmail(email) && testPassword(password))
         {
             result = true;
         }

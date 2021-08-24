@@ -10,7 +10,7 @@ public class VaccineCentre {
 
     }
 
-    public int getCenterId() {
+    public int getCentreId() {
         return centerId;
     }
 

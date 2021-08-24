@@ -24,13 +24,13 @@ public class App
 
         ArrayList<User> users = new ArrayList();
 
-        System.out.println(RegexChecker.testCaoNumber(userOne.getCaoNumber()));
-        System.out.println(RegexChecker.testDateOfBirth(userOne.getDateOfBirth()));
+        System.out.println(RegexChecker.testUserId(userOne.getUserId()));
+        System.out.println(RegexChecker.testEmail(userOne.getEmail()));
         System.out.println(RegexChecker.testPassword(userOne.getPassword()));
 
 
-        System.out.println(RegexChecker.testCaoNumber(userTwo.getCaoNumber()));
-        System.out.println(RegexChecker.testDateOfBirth(userThree.getDateOfBirth()));
+        System.out.println(RegexChecker.testUserId(userTwo.getUserId()));
+        System.out.println(RegexChecker.testEmail(userThree.getEmail()));
         System.out.println(RegexChecker.testPassword(userFour.getPassword()));
     }
 }
