@@ -1,58 +1,54 @@
 package com.dkit.oopca5.server;
 
+import com.dkit.oopca5.client.CAOClient;
 import com.dkit.oopca5.core.CAOService;
+import com.dkit.oopca5.core.Colours;
 import com.dkit.oopca5.core.IVaccineAppointmentDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
-public class MySqlVaccineAppointmentDAO extends MySqlDAO implements IVaccineAppointmentDAO
-{
-    private static MySqlVaccineCentreDAO centreDAO = new MySqlVaccineCentreDAO();
+public class MySqlVaccineAppointmentDAO extends MySqlDAO implements IVaccineAppointmentDAO {
+    private static MySqlVaccineCentreDAO vaccineCentreDAO = new MySqlVaccineCentreDAO();
 
     @Override
-    public String displayCurrentChoice(int caoNumber) throws DAOExceptions
-    {
+    public String displayVaccineAppointmentChoice(String email) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         String result = "";
-        StringBuffer currentChoices = new StringBuffer();
+        StringBuffer appointments = new StringBuffer();
 
-        try
-        {
+        try {
             con = this.getConnection();
-            String query = "select * from Vaccine appointment where cao_number = ?";
+            String query = "select * from vaccine_appointment as v inner join vaccine_centre p on v.centre_id = p.centre_id  where v.user_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, Integer.toString(caoNumber));
+            ps.setString(1, (email));
 
-            ps.executeQuery();
+            rs = ps.executeQuery();
 
-            while(rs.next())
-            {
-                String centreId = rs.getString("centreId");
+            while (rs.next()) {
+                int userId = rs.getInt("user_id");
+                int centerId = rs.getInt("centre_id");
+                String location = rs.getString("location");
+                String time = rs.getString("appointment_time");
 
-                currentChoices.append(centreDAO.displayCentre(centreId));
-                currentChoices.append("\n\n");
+                appointments.append(CAOService.SUCCESSFUL_DISPLAY_APPOINMENT + CAOService.BREAKING_CHARACTER +
+                        + centerId+ CAOService.BREAKING_CHARACTER +location + CAOService.BREAKING_CHARACTER+time + "&" );
+
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             e.getMessage();
             return CAOService.VACCENTRES_EMPTY;
-        }
-        catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             e.getMessage();
             return CAOService.VACCENTRES_EMPTY;
-        }
-        finally {
+        } finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -68,45 +64,30 @@ public class MySqlVaccineAppointmentDAO extends MySqlDAO implements IVaccineAppo
             }
         }
 
-        return currentChoices.toString();
+        return appointments.toString();
     }
 
-    //Didn't know how to make multiple choices...
+
     @Override
-    public String updateCurrentAppointment(String caoNumber, String choice) throws DAOExceptions
-    {
+    public String bookVaccineAppointmentChoice(int userId, int center_id, String datetime) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         String result = "";
 
-        try
-        {
+        try {
             con = this.getConnection();
-            String query = "delete * from vaccine_appointment where cao_number = ?; insert into vaccine_appointment values(?, ?)";
 
-            int caoNum = Integer.parseInt(caoNumber);
+            String query = "insert into vaccine_appointment(user_id,centre_id ,appointment_time) values(?, ?, ?)";
+            ps = con.prepareStatement(query);
 
-            ps.setInt(1, caoNum);
-            ps.setInt(2, caoNum);
-            ps.setString(3, choice);
-
+            ps.setInt(1, userId);
+            ps.setInt(2, center_id);
+            ps.setString(3, datetime);
             ps.executeUpdate();
-
-            if(!displayCurrentChoice(caoNum).equals(CAOService.VACCENTRES_EMPTY))
-            {
-                result = CAOService.UPDATE_CURRENT_APPOINTMENT_SUCCESS;
-            }
-            else
-            {
-                result = CAOService.UPDATE_CURRENT_APPOINTMENT_FAILED;
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally {
+        } catch (SQLException se) {
+            throw new DAOExceptions(se.getMessage());
+        } finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -121,7 +102,51 @@ public class MySqlVaccineAppointmentDAO extends MySqlDAO implements IVaccineAppo
                 System.out.println(e.getMessage());
             }
         }
-
-        return  result;
+        result = CAOService.SUCCESSFUL_BOOK_VACCINE + CAOService.BREAKING_CHARACTER + center_id
+                + CAOService.BREAKING_CHARACTER + datetime;
+        return result;
     }
+
+    @Override
+    public String updateVaccineAppointmentChoice(int userId, int center_id, String datetime) throws DAOExceptions {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String result = "";
+
+
+
+
+        try {
+            con = this.getConnection();
+
+            String query = "update vaccine_appointment set appointment_time = ? where user_id = ?";
+            ps = con.prepareStatement(query);
+
+            ps.setString(1, datetime);
+
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            throw new DAOExceptions(se.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    freeConnection(con);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        result = CAOService.UPDATE_CURRENT_APPOINTMENT_SUCCESS + CAOService.BREAKING_CHARACTER + center_id
+                + CAOService.BREAKING_CHARACTER + datetime;
+        return result;
+    }
+
 }

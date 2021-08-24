@@ -1,42 +1,34 @@
 package com.dkit.oopca5.core;
 
-public class VaccineCentre
-{
-    private String vaccineCentreID;
-    private int vaccineCentreLevel;
-    private String vaccineCentreTitle;
-    private String institution;
+public class VaccineCentre {
+    private int centerId;
+    private String location;
 
-    public VaccineCentre(String vaccineCentreID, int vaccineCentreLevel, String vaccineCentreTitle, String institution) {
-        this.vaccineCentreID = vaccineCentreID;
-        this.vaccineCentreLevel = vaccineCentreLevel;
-        this.vaccineCentreTitle = vaccineCentreTitle;
-        this.institution = institution;
+    public VaccineCentre(int centerId, String location) {
+        this.centerId = centerId;
+        this.location = location;
+
     }
 
-    public String getVaccineCentreID() {
-        return vaccineCentreID;
+    public int getCenterId() {
+        return centerId;
     }
 
-    public int getVaccineCentreLevel() {
-        return vaccineCentreLevel;
+    public void setCenterId(int centerId) {
+        this.centerId = centerId;
     }
 
-    public String getVaccineCentreTitle() {
-        return vaccineCentreTitle;
+    public String getLocation() {
+        return location;
     }
 
-    public String getInstitution() {
-        return institution;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
     public String toString() {
-        return "VaccineCentre{" +
-                "vaccineCentreID='" + vaccineCentreID + '\'' +
-                ", vaccineCentreLevel=" + vaccineCentreLevel +
-                ", vaccineCentreTitle='" + vaccineCentreTitle + '\'' +
-                ", institution='" + institution + '\'' +
-                '}';
+        return "Vaccine Center{" + "Center ID=" + centerId + ", locatiot='" + location + '\'' + '}';
     }
+
 }

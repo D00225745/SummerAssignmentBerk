@@ -15,6 +15,8 @@ import com.dkit.oopca5.server.MySqlUserDAO;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -23,7 +25,7 @@ public class CAOClient
     static boolean loggedIn = false;
     static Scanner keyboard = new Scanner(System.in);
     static RegexChecker regexChecker = new RegexChecker();
-    private static int loggedInUser = 0;
+    private static String loggedInUser = "";
 
     public static void main(String[] args) {
         try {
@@ -75,7 +77,7 @@ public class CAOClient
                                 if (response.equals(CAOService.SUCCESSFUL_REGISTER)) {
                                     System.out.println("Successfully registered");
                                 } else if (response.equals(CAOService.FAILED_REGISTER)) {
-                                    System.out.println(Colours.RED + "Failed to register. CAO Number taken" + Colours.RESET);
+                                    System.out.println(Colours.RED + "Failed to register. Email taken" + Colours.RESET);
                                 } else {
                                     System.out.println("Test");
                                 }
@@ -89,9 +91,10 @@ public class CAOClient
 
                                 response = serverIn.nextLine();
 
-                                if (response.equals(CAOService.SUCCESSFUL_LOGIN)) {
+                                if (response.split(CAOService.BREAKING_CHARACTER)[1].equals(CAOService.SUCCESSFUL_LOGIN)) {
                                     System.out.println("Successfully logged in.");
                                     loggedIn = true;
+                                    loggedInUser = ( response.split(CAOService.BREAKING_CHARACTER)[0]);
                                 } else if (response.equals(CAOService.FAILED_LOGIN)) {
                                     System.out.println(Colours.RED + "Sorry, student with those details not found." + Colours.RESET);
                                 }
@@ -110,12 +113,12 @@ public class CAOClient
 
                 while (!message.equals(CAOService.QUIT_MENU) && loggedIn) {
                 /*
-                0. QUIT
-                1. LOGOUT
-                2. DISPLAY_COURSE
-                3. DISPLAY_ALL_COURSES
-                4. DISPLAY_CURRENT_CHOICES
-                5. UPDATE_CURRENT_CHOICES
+					0. QUIT
+					1. LOGOUT
+					2. DISPLAY_VACCINE_CENTRES
+					3. BOOK_VACCINE
+					4. DISPLAY_VACCINE_APPOINTMENT
+					5. UPDATE_VACCINE_APPOINTMENT
                  */
 
                     displayLoggedInMenu();
@@ -132,18 +135,33 @@ public class CAOClient
                             case 1:
                                 System.out.println("Logging out...");
                                 loggedIn = false;
-                                loggedInUser = 0;
+                                loggedInUser = "";
                                 break;
 
                             case 2:
-                                message = inputVaccineCentreId();
+                                message = CAOService.DISPLAY_ALL_VACCENTRE;
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
+                                System.out.println("-----------------------------------------------------------------------------");
+                                System.out.printf("%10s %30s", "LOCATION ID", "LOCATION NAME");
+                                System.out.println();
+                                System.out.println("-----------------------------------------------------------------------------");
+
+                                String[] line = response.split( "&" );
+                                for(int t= 0;t<line.length;t++){
+                                    String[] sep = line[t].split( "%%" );
+                                    System.out.format("%10s %30s",
+                                            sep[0], sep[1]);
+                                    System.out.println();
+                                }
+                                System.out.println("-----------------------------------------------------------------------------");
+
+
                                 System.out.println(response);
                                 break;
 
                             case 3:
-                                message = CAOService.DISPLAY_ALL_VACCENTRE;
+                                message = bookVaccine(loggedInUser);
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
                                 System.out.println(response);
@@ -154,18 +172,37 @@ public class CAOClient
                                 message = toSend;
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
+
+                                System.out.println("-----------------------------------------------------------------------------");
+                                System.out.printf("%10s %30s %20s", "CENTER ID", "LOCATION NAME", "DATE TIME");
+                                System.out.println();
+                                System.out.println("-----------------------------------------------------------------------------");
+
+                                String[] line4 = response.split( "&" );
+                                for(int t= 0;t<line4.length;t++){
+                                    String[] sep = line4[t].split( "%%" );
+                                    System.out.format("%10s %30s %20s",
+                                            sep[1], sep[2], sep[3]);
+                                    System.out.println();
+                                }
+                                System.out.println("-----------------------------------------------------------------------------");
+
+
                                 System.out.println(response);
                                 break;
 
                             case 5:
-                                message = updateCurrentChoices();
+                                message = updateVaccine(loggedInUser);
 
                                 serverOut.println(message);
                                 response = serverIn.nextLine();
                                 System.out.println(response);
                                 break;
 
+
                         }
+
+                        ;
                     } else {
                         System.out.println("Please select an option from the menu");
                     }
@@ -180,7 +217,7 @@ public class CAOClient
 
 
 
-        System.out.println("Thank you for using the CAO Application.");
+        System.out.println("Thank you for using the Vaccine Application.");
     }
 
     private static String updateCurrentChoices()
@@ -204,28 +241,16 @@ public class CAOClient
 
     }
 
-    private static String inputVaccineCentreId()
-    {
-        keyboard.nextLine();
-        StringBuffer vaccineCentreId = new StringBuffer(CAOService.DISPLAY_VACCENTRE);
-        vaccineCentreId.append(CAOService.BREAKING_CHARACTER);
 
-        System.out.println("Please enter course id for course you want to display:");
-        String vaccineCentre = keyboard.nextLine();
-
-        vaccineCentreId.append(vaccineCentre);
-
-        return vaccineCentreId.toString();
-    }
 
     private static void displayLoggedInMenu()
     {
         System.out.println(Colours.RED + "0) To Quit" + Colours.RESET);
         System.out.println(Colours.BLUE + "1) Logout");
-        System.out.println(Colours.BLUE + "2) Display VaccineCentre");
-        System.out.println(Colours.BLUE + "3) Display All Courses");
-        System.out.println(Colours.BLUE + "4) Display Current Choices");
-        System.out.println(Colours.BLUE + "5) Update Current Choices" + Colours.RESET);
+        System.out.println(Colours.BLUE + "2) Display All Vaccine Centres");
+        System.out.println(Colours.BLUE + "3) Book Vaccine");
+        System.out.println(Colours.BLUE + "4) Display Vaccie Appoinment");
+        System.out.println(Colours.BLUE + "5) Update Vaccie Appoinmen" + Colours.RESET);
     }
 
 
@@ -274,45 +299,32 @@ public class CAOClient
         StringBuffer registeredUser = new StringBuffer(CAOService.REGISTER_COMMAND);
         registeredUser.append(CAOService.BREAKING_CHARACTER);
         int caoNumber = 1;
-        String dateOfBirth = "a";
+        String email = "a";
         String password = "a";
 
-        System.out.println("Please enter your CAO Number (8 digits): ");
-        while (!regexChecker.testCaoNumber(caoNumber))
+        System.out.println("Please enter your Email Id: ");
+        while (!regexChecker.testEmail(email))
         {
             try
             {
-                caoNumber = keyboard.nextInt();
-                if(!regexChecker.testCaoNumber(caoNumber))
+                email = keyboard.next();
+                if(!regexChecker.testEmail(email))
                 {
-                    System.out.println(Colours.RED + "Incorrect CAO Number, please make sure it is 8 digits" + Colours.RESET);
+                    System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
                     keyboard.nextLine();
                 }
             }
             catch (InputMismatchException e)
             {
-                System.out.println(Colours.RED + "Incorrect CAO Number, please make sure it is 8 digits" + Colours.RESET);
+                System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
                 keyboard.nextLine();
             }
         }
 
         keyboard.nextLine();
-        registeredUser.append(caoNumber);
+        registeredUser.append(email);
         registeredUser.append(CAOService.BREAKING_CHARACTER);
 
-        System.out.println("\nPlease enter your date of birth (YYYY-MM-DD): ");
-        while (!regexChecker.testDateOfBirth(dateOfBirth))
-        {
-            dateOfBirth = keyboard.nextLine();
-
-            if(!regexChecker.testDateOfBirth(dateOfBirth))
-            {
-                System.out.println(Colours.RED + "Incorrect format, please make sure it is in the form YYYY-MM-DD" + Colours.RESET);
-            }
-        }
-
-        registeredUser.append(dateOfBirth);
-        registeredUser.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("\nPlease enter your password (minimum of 8 characters, maximum of 30 characters)");
         while (!regexChecker.testPassword(password))
@@ -336,31 +348,31 @@ public class CAOClient
     {
         StringBuffer loginDetails = new StringBuffer(CAOService.LOGIN_COMMAND);
         loginDetails.append(CAOService.BREAKING_CHARACTER);
-        int caoNumber = 1;
+        String email= "1dwdwdw";
         String password = "a";
 
-        System.out.println("Please enter your CAO Number (8 digits): ");
-        while (!regexChecker.testCaoNumber(caoNumber))
+        System.out.println("Please enter your E-mail adress: ");
+        while (!regexChecker.testEmail(email))
         {
             try
             {
-                caoNumber = keyboard.nextInt();
-                if(!regexChecker.testCaoNumber(caoNumber))
+                email = keyboard.next();
+                if(!regexChecker.testEmail(email))
                 {
-                    System.out.println(Colours.RED + "Incorrect CAO Number, please make sure it is 8 digits" + Colours.RESET);
+                    System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
                     keyboard.nextLine();
                 }
 
             }
             catch (InputMismatchException e)
             {
-                System.out.println(Colours.RED + "Incorrect CAO Number, please make sure it is 8 digits" + Colours.RESET);
+                System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
                 keyboard.nextLine();
             }
         }
 
         keyboard.nextLine();
-        loginDetails.append(caoNumber);
+        loginDetails.append(email);
         loginDetails.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("\nPlease enter your password (minimum of 8 characters, maximum of 30 characters)");
@@ -377,9 +389,92 @@ public class CAOClient
         loginDetails.append(password);
         loginDetails.append(CAOService.BREAKING_CHARACTER);
 
-        loggedInUser = caoNumber;
+        loggedInUser = email;
 
         return loginDetails.toString();
     }
+
+
+    private static String bookVaccine(String userId1)
+    {
+        StringBuffer bookDetails = new StringBuffer(CAOService.BOOK_VACCINE);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+        int userId= Integer.parseInt(userId1);
+        int centerId= 1;
+        String dateTime = "";
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        dateTime = (dtf.format(now));
+
+        System.out.println("Please enter center id");
+
+        try
+        {
+            centerId = Integer.parseInt(keyboard.next());
+
+        }
+        catch (InputMismatchException e)
+        {
+            System.out.println(Colours.RED + "Incorrect Location, please make sure it is correct" + Colours.RESET);
+            keyboard.nextLine();
+        }
+
+
+        keyboard.nextLine();
+        bookDetails.append(userId);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+
+        bookDetails.append(centerId);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+
+        bookDetails.append(dateTime);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+
+
+        return bookDetails.toString();
+    }
+
+
+    private static String updateVaccine(String userId1)
+    {
+        StringBuffer bookDetails = new StringBuffer(CAOService.UPDATE_CURRENT_APPOINTMENT);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+        int userId= Integer.parseInt(userId1);
+        int centerId= 1;
+        String dateTime = "";
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        dateTime = (dtf.format(now));
+
+        System.out.println("Please enter center id");
+
+        try
+        {
+            centerId = Integer.parseInt(keyboard.next());
+
+        }
+        catch (InputMismatchException e)
+        {
+            System.out.println(Colours.RED + "Incorrect Location, please make sure it is correct" + Colours.RESET);
+            keyboard.nextLine();
+        }
+
+
+        keyboard.nextLine();
+        bookDetails.append(userId);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+        bookDetails.append(centerId);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+        bookDetails.append(dateTime);
+        bookDetails.append(CAOService.BREAKING_CHARACTER);
+
+
+
+        return bookDetails.toString();
+    }
+
+
 
 }

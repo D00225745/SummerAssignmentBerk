@@ -4,8 +4,8 @@ import com.dkit.oopca5.server.DAOExceptions;
 
 public interface IVaccineCentreDAO
 {
-    String displayCentre(String courseID) throws DAOExceptions;
-    String displayAllCentres() throws DAOExceptions;
-    boolean doesCentreExist(String courseId) throws DAOExceptions;
+    String displayVaccineCenter(int centreId ) throws DAOExceptions;
+    String displayAllVaccineCenters() throws DAOExceptions;
+    boolean doesVaccineCenterExist(int centreId) throws DAOExceptions;
 
 }

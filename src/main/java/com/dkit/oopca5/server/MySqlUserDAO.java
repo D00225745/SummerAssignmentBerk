@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
 
     @Override
-    public String registerUser(int caoNumber, String dateOfBirth, String password) throws DAOExceptions
+    public String registerUser(String email, String password) throws DAOExceptions
     {
         Connection con = null;
         PreparedStatement ps = null;
@@ -22,15 +22,15 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
 
         try {
             con = this.getConnection();
-            String query = "insert into user values(?, ?, ?)";
+
+            String query = "insert into user(email,password) values(?, ?)";
             ps = con.prepareStatement(query);
 
 
-            ps.setInt(1, caoNumber);
-            ps.setString(2, dateOfBirth);
-            ps.setString(3, password);
+            ps.setString(1, email);
+            ps.setString(2, password);
 
-            if(!checkIfCAONumberTaken(caoNumber)) {
+            if(!checkIfUserIdTaken(email)) {
                 ps.executeUpdate();
                 System.out.println("Executed update");
                 result = CAOService.SUCCESSFUL_REGISTER;
@@ -65,7 +65,7 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
     }
 
     @Override
-    public boolean checkIfCAONumberTaken(int caoNumber) {
+    public boolean checkIfUserIdTaken(String email) {
         boolean userExists = false;
 
         Connection con = null;
@@ -75,9 +75,9 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
         try {
             con = this.getConnection();
 
-            String query = "select * from user where cao_number = ?";
+            String query = "select * from user where email = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, Integer.toString(caoNumber));
+            ps.setString(1, (email));
 
             rs = ps.executeQuery();
 
@@ -117,10 +117,10 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
     }
 
     @Override
-    public boolean login(int caoNumber, String password)
+    public int login(String email, String password)
     {
         boolean successfulLogin = false;
-
+        int userId = -1;
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -128,16 +128,16 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
         try {
             con = this.getConnection();
 
-            String query = "select * from user where cao_number = ? and password = ?";
+            String query = "select * from user where email = ? and password = ?";
 
             ps = con.prepareStatement(query);
-            ps.setString(1, Integer.toString(caoNumber));
+            ps.setString(1, email);
             ps.setString(2, password);
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                successfulLogin = true;
+                userId = rs.getInt(1);
             }
         }
         catch (DAOExceptions e)
@@ -168,7 +168,7 @@ public class MySqlUserDAO extends MySqlDAO implements IUserDAO {
 
         }
 
-        return successfulLogin;
+        return userId;
     }
 
 

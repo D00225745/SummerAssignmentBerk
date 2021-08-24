@@ -13,26 +13,25 @@ import java.util.NoSuchElementException;
 public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO {
 
     @Override
-    public String displayCentre(String centreId) throws DAOExceptions {
+    public String displayVaccineCentre(int centerId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String centreDetails = "none";
+        String courseDetails = "none";
 
         try {
             con = this.getConnection();
-            String query = "select * from centre where course_id = ?";
+            String query = "select * from vaccine_centre where center_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, centreId);
+            ps.setString(1, centerId + "");
 
             ps.executeQuery();
 
             while (rs.next() && rs != null) {
-                String level = rs.getString("level");
-                String title = rs.getString("title");
-                String institution = rs.getString("institution");
+                String location = rs.getString("location");
 
-                centreDetails = ("VaccineCentre Id: " + centreId + "\nLevel: " + level + "\nTitle: " + title + "\nInstitution" + institution);
+
+                courseDetails = ("Center Id: " + centerId + "\nlocation: " + location );
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -52,31 +51,29 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
             }
         }
 
-        return centreDetails;
+        return courseDetails;
     }
 
     @Override
-    public String displayAllCentres() throws DAOExceptions {
+    public String displayAllVaccineCenters() throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        StringBuffer centres = new StringBuffer();
-        String centreDetails = "0";
+        StringBuffer vaccinecenters = new StringBuffer();
+        String vaccines = "";
 
         try {
             con = this.getConnection();
-            String query = "select * from centre";
+            String query = "select * from vaccine_centre";
             ps = con.prepareStatement(query);
 
-            ps.executeQuery();
+            rs = ps.executeQuery();
 
-            while (rs.next() && rs != null) {
-                String centreId = rs.getString("centre_id");
-                int level = rs.getInt("level");
-                String title = rs.getString("title");
-                String institution = rs.getString("institution");
+            while (rs.next()) {
+                int centerId = rs.getInt("centre_id");
+                String location = rs.getString("location");
 
-                centres.append("\nVaccineCentre Id: " + centreId + "\tLevel: " + level + "\tTitle: " + title + "\tInstitution: " + institution);
+                vaccinecenters.append(centerId + "%%" + location+"&");
             }
         }
         catch (SQLException e)
@@ -85,7 +82,7 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
         }
         catch (NoSuchElementException e)
         {
-            System.out.println(Colours.RED + "Could not find any vaccine centres to display." + Colours.RESET);
+            System.out.println(Colours.RED + "Couldn't find any vaccine centers to display." + Colours.RESET);
         }
         catch (NullPointerException e)
         {
@@ -108,12 +105,13 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
             }
         }
 
-        centreDetails = centres.toString();
-        return centreDetails;
+        vaccines = vaccinecenters.toString();
+        vaccines = (vaccines.substring(0, vaccines.length() - 2));
+        return vaccines;
     }
 
     @Override
-    public boolean doesCentreExist(String centreId) throws DAOExceptions {
+    public boolean doesVaccineCenterExist(int centerId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -121,9 +119,9 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
 
         try {
             con = this.getConnection();
-            String query = "select * from vaccine centre where centre_id = ?";
+            String query = "select * from vaccine_centre where center_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, centreId);
+            ps.setInt(1, centerId);
 
             ps.executeQuery();
 

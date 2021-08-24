@@ -10,6 +10,7 @@ import com.dkit.oopca5.core.CAOService;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class CAOServer
                 //Listening socket
                 Socket dataSocket = listeningSocket.accept();
                 threadCount++;
-                System.out.println("The server now has accepted client number: " + threadCount);
+                System.out.println("The server has now accepted client number " + threadCount);
 
                 //Building the thread
                 CAOClientHandler newClient = new CAOClientHandler(clientThreadGroup, dataSocket.getInetAddress() + "", dataSocket, threadCount);
@@ -58,7 +59,7 @@ public class CAOServer
         }
         catch(NoSuchElementException e)
         {
-            System.out.println("Shutting down. new threads needed...");
+            System.out.println("Shutting down. I think we need threads");
             System.exit(1);
         }
 
