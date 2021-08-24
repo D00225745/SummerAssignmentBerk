@@ -34,7 +34,7 @@ public class AppTest
         MySqlVaccineCentreDAO courseDAO = new MySqlVaccineCentreDAO();
         String wrongResult = "0";
 
-        if (courseDAO.displayAllVaccineCenters() != wrongResult)
+        if (courseDAO.displayAllVaccineCentres() != wrongResult)
         {
             assertTrue(true);
         }
@@ -45,7 +45,7 @@ public class AppTest
     }
 
     @Test
-    public void courseDoesNotExist() throws DAOExceptions
+    public void centreDoesNotExist() throws DAOExceptions
     {
         MySqlVaccineCentreDAO courseDAO = new MySqlVaccineCentreDAO();
         int centerId = 123;

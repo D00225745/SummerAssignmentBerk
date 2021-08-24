@@ -13,17 +13,17 @@ import java.util.NoSuchElementException;
 public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO {
 
     @Override
-    public String displayVaccineCentre(int centerId) throws DAOExceptions {
+    public String displayVaccineCentre(int centreId) throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String courseDetails = "none";
+        String centreDetails = "none";
 
         try {
             con = this.getConnection();
-            String query = "select * from vaccine_centre where center_id = ?";
+            String query = "select * from vaccine_centre where centre_id = ?";
             ps = con.prepareStatement(query);
-            ps.setString(1, centerId + "");
+            ps.setString(1, centreId + "");
 
             ps.executeQuery();
 
@@ -31,7 +31,7 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
                 String location = rs.getString("location");
 
 
-                courseDetails = ("Center Id: " + centerId + "\nlocation: " + location );
+                centreDetails = ("Centre Id: " + centreId + "\nlocation: " + location );
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -51,11 +51,11 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
             }
         }
 
-        return courseDetails;
+        return centreDetails;
     }
 
     @Override
-    public String displayAllVaccineCenters() throws DAOExceptions {
+    public String displayAllVaccineCentres() throws DAOExceptions {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -82,7 +82,7 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
         }
         catch (NoSuchElementException e)
         {
-            System.out.println(Colours.RED + "Couldn't find any vaccine centers to display." + Colours.RESET);
+            System.out.println(Colours.RED + "Couldn't find any vaccine centres to display." + Colours.RESET);
         }
         catch (NullPointerException e)
         {

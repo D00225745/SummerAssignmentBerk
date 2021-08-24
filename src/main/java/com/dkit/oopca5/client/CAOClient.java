@@ -61,7 +61,7 @@ public class CAOClient
                                 //Listen for response
                                 response = serverIn.nextLine();
                                 if (response.equals(CAOService.SESSION_TERMINATED)) {
-                                    System.out.println("Thanks for using the TCP Combo Service");
+                                    System.out.println("Thanks for using the our Service");
                                     System.out.println("Session ended");
                                 }
                                 break;
@@ -96,13 +96,13 @@ public class CAOClient
                                     loggedIn = true;
                                     loggedInUser = ( response.split(CAOService.BREAKING_CHARACTER)[0]);
                                 } else if (response.equals(CAOService.FAILED_LOGIN)) {
-                                    System.out.println(Colours.RED + "Sorry, student with those details not found." + Colours.RESET);
+                                    System.out.println(Colours.RED + "Sorry, user with those details not found." + Colours.RESET);
                                 }
 
                         }
 
                         if (response.equals(CAOService.UNRECOGNISED)) {
-                            System.out.println("Sorry, the request is not recognised. Please enter a number between 0 and 2");
+                            System.out.println("Sorry, this request was not recognised. Please enter a number between 0 and 2");
                         }
                     } else {
                         System.out.println("Please select an option from the menu");
@@ -220,12 +220,12 @@ public class CAOClient
         System.out.println("Thank you for using the Vaccine Application.");
     }
 
-    private static String updateCurrentChoices()
+    private static String updateCurrentAppointment()
     {
         keyboard.nextLine();
         int counter = 1;
         boolean loop = true;
-        String courseId = "";
+        String centreId = "";
         StringBuffer message = new StringBuffer(CAOService.UPDATE_CURRENT_APPOINTMENT);
         message.append(CAOService.BREAKING_CHARACTER);
 
@@ -233,9 +233,9 @@ public class CAOClient
         message.append(CAOService.BREAKING_CHARACTER);
 
         System.out.println("Please insert your choice: ");
-        courseId = keyboard.nextLine();
+        centreId = keyboard.nextLine();
 
-        message.append(courseId);
+        message.append(centreId);
 
         return message.toString();
 
@@ -249,8 +249,8 @@ public class CAOClient
         System.out.println(Colours.BLUE + "1) Logout");
         System.out.println(Colours.BLUE + "2) Display All Vaccine Centres");
         System.out.println(Colours.BLUE + "3) Book Vaccine");
-        System.out.println(Colours.BLUE + "4) Display Vaccie Appoinment");
-        System.out.println(Colours.BLUE + "5) Update Vaccie Appoinmen" + Colours.RESET);
+        System.out.println(Colours.BLUE + "4) Display Vaccine Appointment");
+        System.out.println(Colours.BLUE + "5) Update Vaccine Appointment" + Colours.RESET);
     }
 
 
@@ -298,11 +298,11 @@ public class CAOClient
     {
         StringBuffer registeredUser = new StringBuffer(CAOService.REGISTER_COMMAND);
         registeredUser.append(CAOService.BREAKING_CHARACTER);
-        int caoNumber = 1;
+        int userId = 1;
         String email = "a";
         String password = "a";
 
-        System.out.println("Please enter your Email Id: ");
+        System.out.println("Please enter your Email : ");
         while (!regexChecker.testEmail(email))
         {
             try
@@ -310,13 +310,13 @@ public class CAOClient
                 email = keyboard.next();
                 if(!regexChecker.testEmail(email))
                 {
-                    System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
+                    System.out.println(Colours.RED + "Incorrect Email Address, please make sure it is correct" + Colours.RESET);
                     keyboard.nextLine();
                 }
             }
             catch (InputMismatchException e)
             {
-                System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
+                System.out.println(Colours.RED + "Incorrect Email Address, please make sure it is correct" + Colours.RESET);
                 keyboard.nextLine();
             }
         }
@@ -351,7 +351,7 @@ public class CAOClient
         String email= "1dwdwdw";
         String password = "a";
 
-        System.out.println("Please enter your E-mail adress: ");
+        System.out.println("Please enter your E-mail address: ");
         while (!regexChecker.testEmail(email))
         {
             try
@@ -359,14 +359,14 @@ public class CAOClient
                 email = keyboard.next();
                 if(!regexChecker.testEmail(email))
                 {
-                    System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
+                    System.out.println(Colours.RED + "Incorrect Email Address, please make sure it is correct" + Colours.RESET);
                     keyboard.nextLine();
                 }
 
             }
             catch (InputMismatchException e)
             {
-                System.out.println(Colours.RED + "Incorrect Email Adress, please make sure it is correct" + Colours.RESET);
+                System.out.println(Colours.RED + "Incorrect Email Address, please make sure it is correct" + Colours.RESET);
                 keyboard.nextLine();
             }
         }
@@ -448,7 +448,7 @@ public class CAOClient
         LocalDateTime now = LocalDateTime.now();
         dateTime = (dtf.format(now));
 
-        System.out.println("Please enter center id");
+        System.out.println("Please enter centre id");
 
         try
         {

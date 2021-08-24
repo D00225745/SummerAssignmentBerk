@@ -99,7 +99,7 @@ public class CAOClientHandler extends Thread
                 }
                 else if(components[0].equals(CAOService.DISPLAY_ALL_VACCENTRE))
                 {
-                    response = vaccineCenterDatabase.displayAllVaccineCenters();
+                    response = vaccineCenterDatabase.displayAllVaccineCentres();
                     if (response == CAOService.VACCENTRES_EMPTY)
                     {
                         response = (Colours.RED + "Couldn't find any vaccine center to display." + Colours.RESET);
