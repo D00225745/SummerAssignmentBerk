@@ -47,7 +47,8 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
+                throw new DAOExceptions(e.getMessage());
             }
         }
 
@@ -148,7 +149,8 @@ public class MySqlVaccineCentreDAO extends MySqlDAO implements IVaccineCentreDAO
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
+                throw new DAOExceptions(e.getMessage());
             }
 
             return result;

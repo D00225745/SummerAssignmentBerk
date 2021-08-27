@@ -7,13 +7,14 @@ All of the database functionality should be here. You will need a DAO for each t
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import com.mysql.jdbc.Driver;
 
 public class MySqlDAO
 {
     public Connection getConnection() throws DAOExceptions
     {
-        String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/SummerAssignmentBerk";
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/oop_repeat_2021_berk_tatar ";
         String username = "root";
         String password = "";
 
